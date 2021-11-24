@@ -1110,8 +1110,13 @@ function Janus(gatewayCallbacks) {
 					gatewayCallbacks.destroyed();
 			};
 
-			ws.addEventListener('message', onUnbindMessage);
-			ws.addEventListener('error', onUnbindError);
+			if (callbacks.forceWebsocketUnbind) {
+				Janus.log("forceWebsocketUnbind");
+				unbindWebSocket();
+			} else {
+				ws.addEventListener('message', onUnbindMessage);
+				ws.addEventListener('error', onUnbindError);
+			}
 
 			if (ws.readyState === 1) {
 				ws.send(JSON.stringify(request));
